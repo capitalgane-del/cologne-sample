@@ -26,16 +26,16 @@ Until you do this the site runs in **demo mode**: a yellow banner shows at the t
 The free plan allows 250 orders a month. Each email looks like this:
 
 ```
-Subject: New order #Q5WXP6 from Sam Taylor ($64.00)
+Subject: New order #Q5WXP6 from Sam Taylor ($34.00)
 
 Order number:        #Q5WXP6
 Customer name:       Sam Taylor
 Year / homeroom:     Year 11
 Phone or Instagram:  @samt
-Items:               2 x Dior Sauvage EDT (10ml) = $40.00
-                     2 x YSL Y EDP (5ml) = $24.00
-Item count:          4
-Total to collect:    $64.00
+Items:               2 x Lattafa Khamrah (10ml) = $26.00
+                     1 x Armaf Club de Nuit Intense Man (5ml) = $8.00
+Item count:          3
+Total to collect:    $34.00
 Notes:               Lunch near the library
 Placed at:           3 Oct 2026, 11:44 am
 ```
@@ -48,33 +48,38 @@ Edit `js/products.js`. Each product looks like this:
 
 ```js
 {
-  id: "dior-sauvage-edt",          // unique, no spaces
-  brand: "Dior",
-  name: "Sauvage EDT",
-  family: "Fresh",                 // becomes a filter button
-  vibe: "The everyday crowd-pleaser",
-  notes: ["Bergamot", "Pepper", "Ambroxan"],
-  sizes: [
-    { label: "5ml", price: 12 },
-    { label: "10ml", price: 20 },
-  ],
-  badge: "Best seller",            // optional
-  color: "#35577c",                // bottle illustration colour
-  capColor: "#1b1b1d",
+  id: "armaf-cdnim",               // unique, no spaces
+  brand: "Armaf",
+  name: "Club de Nuit Intense Man",
+  family: "Smoky & Oud",           // becomes a filter button
+  vibe: "Smoky pineapple. The famous Aventus dupe",
+  notes: ["Lemon", "Pineapple", "Birch"],
+  sizes: PRICE_TIERS.standard,     // price tier (see below)
+  parfumo: "https://www.parfumo.com/Perfumes/Armaf/club-de-nuit-intense-man-eau-de-toilette",
+  inspiredBy: {                    // dupes only, leave out for originals
+    brand: "Creed",
+    name: "Aventus",
+    parfumo: "https://www.parfumo.com/Perfumes/Creed/aventus",
+  },
+  badge: "Hyped",                  // optional
+  color: "#1f1f22",                // bottle illustration colour
+  capColor: "#b9b9bd",
   shape: "square",                 // classic | tall | round | square
   inStock: true,                   // false = "Sold out"
 },
 ```
 
-- **Sizes** can be anything: `"5ml"`, `"10ml"`, `"Full bottle 100ml"`. Selling full bottles only? Give each product one size.
-- **Real photos:** put images in an `images/` folder and add `image: "images/sauvage.jpg"` to a product. It replaces the drawn bottle.
+- **Prices** are set by tier at the top of the file (`budget`, `standard`, `mid`, `premium`). Change a tier once and every scent in it updates. A product can also have its own list: `sizes: [{ label: "5ml", price: 9 }, { label: "10ml", price: 15 }]`.
+- **Parfumo links:** search the scent on parfumo.com and copy the page address. Each card shows "Reviews on Parfumo", and dupes also show "Inspired by …" linking to the original. Both open in a new tab, so shoppers don't lose their bag.
+- **Search** also matches the original's name, so typing "Aventus" finds Club de Nuit.
+- **Real photos:** put images in an `images/` folder and add `image: "images/khamrah.jpg"` to a product. It replaces the drawn bottle.
 - **Sold out:** set `inStock: false`. The item stays visible but can't be ordered.
 
-The products already in the file are **sample data**. Replace the prices and range with what you actually stock.
+The current prices are starting estimates based on what a bottle costs per ml. Check them against what you actually paid.
 
 ## 3. Change the text
 
-`js/config.js` controls the shop name, hero text, pickup/payment note, whether to ask for year group, and the max quantity per scent. Check the FAQ answers in `index.html` too, and only keep the "authentic" answer if it's true.
+`js/config.js` controls the shop name, hero text, pickup/payment note, whether to ask for year group, and the max quantity per scent. Check the FAQ answers in `index.html` too, and only keep the "authentic" answer if it's true. Never call a dupe by the original's name: "inspired by Aventus" is fine, "Aventus" is not.
 
 ## 4. Put it online (free)
 

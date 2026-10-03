@@ -7,7 +7,7 @@ window.SHOP_CONFIG = {
   heroEyebrow: "Student-run · Pickup at school",
   heroTitle: "Designer fragrances, student prices.",
   heroSubtitle:
-    "Try the scents everyone's talking about in 5ml and 10ml decants. Order here, pay when you pick up.",
+    "Designer colognes and the best dupes in 5ml and 10ml decants. Order here, pay when you pick up.",
 
   currencySymbol: "$",
 

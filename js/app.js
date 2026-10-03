@@ -24,6 +24,16 @@
   const ESC_MAP = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" };
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ESC_MAP[c]);
   const money = (n) => CONFIG.currencySymbol + Number(n).toFixed(2);
+  const ARROW = '<svg viewBox="0 0 12 12" width="10" height="10" aria-hidden="true"><path d="M3.5 2.5h6v6M9.5 2.5l-7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>';
+
+  // Opens in a new tab so the shopper keeps their bag. Only https links are rendered.
+  function extLink(url, label, className = "") {
+    if (!/^https:\/\//i.test(url || "")) return esc(label);
+    // Keep the arrow on the same line as the last word.
+    const cut = label.lastIndexOf(" ") + 1;
+    const text = `${esc(label.slice(0, cut))}<span class="nowrap">${esc(label.slice(cut))}${ARROW}</span>`;
+    return `<a class="${className}" href="${esc(url)}" target="_blank" rel="noopener noreferrer">${text}<span class="visually-hidden"> (opens in a new tab)</span></a>`;
+  }
 
   const productById = new Map(PRODUCTS.map((p) => [p.id, p]));
   const sizeOf = (p, label) => (p ? p.sizes.find((s) => s.label === label) : undefined);
@@ -157,7 +167,8 @@
     let list = PRODUCTS.filter((p) => {
       if (filters.family !== "All" && p.family !== filters.family) return false;
       if (!q) return true;
-      return [p.brand, p.name, p.family, ...(p.notes || [])].join(" ").toLowerCase().includes(q);
+      const inspo = p.inspiredBy ? [p.inspiredBy.brand, p.inspiredBy.name] : [];
+      return [p.brand, p.name, p.family, ...(p.notes || []), ...inspo].join(" ").toLowerCase().includes(q);
     });
     if (filters.sort === "price-asc") list.sort((a, b) => minPrice(a) - minPrice(b));
     if (filters.sort === "price-desc") list.sort((a, b) => minPrice(b) - minPrice(a));
@@ -178,6 +189,9 @@
           `<button type="button" class="size-opt" role="radio" aria-checked="${s.label === current}" data-size="${esc(s.label)}"${available ? "" : " disabled"}>${esc(s.label)}</button>`
       )
       .join("");
+    const inspo = p.inspiredBy
+      ? `<p class="card-inspo"><span>Inspired by</span>${extLink(p.inspiredBy.parfumo, `${p.inspiredBy.brand} ${p.inspiredBy.name}`)}</p>`
+      : '<p class="card-inspo is-original"><span>Designer original</span></p>';
     return `
       <article class="card${available ? "" : " is-soldout"}" data-id="${esc(p.id)}">
         <div class="card-media" style="--tint:${esc(p.color || "#8a7f70")}">
@@ -189,6 +203,8 @@
           <h3 class="card-name">${esc(p.name)}</h3>
           ${p.vibe ? `<p class="card-vibe">${esc(p.vibe)}</p>` : ""}
           <p class="card-notes">${(p.notes || []).map(esc).join(" · ")}</p>
+          ${inspo}
+          ${p.parfumo ? extLink(p.parfumo, "Reviews on Parfumo", "card-link") : ""}
           <div class="size-picker" role="radiogroup" aria-label="Size">${sizes}</div>
           <div class="card-foot">
             <span class="price" data-price>${money(sizeOf(p, current).price)}</span>

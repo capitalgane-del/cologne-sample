@@ -83,6 +83,10 @@ a {
   display: none !important;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -641,6 +645,61 @@ a {
 .card-notes {
   color: var(--muted);
   font-size: 13px;
+}
+
+.card-inspo {
+  display: grid;
+  gap: 1px;
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-radius: var(--radius-sm);
+  background: #f4efe4;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.35;
+}
+
+.card-inspo > span {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.card-inspo a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-color: rgba(22, 20, 15, 0.3);
+  text-underline-offset: 2px;
+}
+
+.card-inspo a:hover {
+  text-decoration-color: currentColor;
+}
+
+.card-inspo.is-original {
+  background: transparent;
+  border: 1px dashed var(--line);
+}
+
+.card-inspo a svg,
+.card-link svg {
+  margin-left: 3px;
+  vertical-align: 0;
+}
+
+.card-link {
+  align-self: flex-start;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 13px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.card-link:hover {
+  color: var(--ink);
 }
 
 .size-picker {
