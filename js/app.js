@@ -177,41 +177,20 @@
     return list.sort((a, b) => isAvailable(b) - isAvailable(a));
   }
 
+  const productHref = (p) => `#scent/${encodeURIComponent(p.id)}`;
+
   function cardHTML(p) {
     const available = isAvailable(p);
-    const current = chosenSize.get(p.id) || p.sizes[0].label;
-    const badge = available
-      ? p.badge ? `<span class="badge">${esc(p.badge)}</span>` : ""
-      : '<span class="badge badge-muted">Sold out</span>';
-    const sizes = p.sizes
-      .map(
-        (s) =>
-          `<button type="button" class="size-opt" role="radio" aria-checked="${s.label === current}" data-size="${esc(s.label)}"${available ? "" : " disabled"}>${esc(s.label)}</button>`
-      )
-      .join("");
-    const inspo = p.inspiredBy
-      ? `<p class="card-inspo"><span>Inspired by</span>${extLink(p.inspiredBy.parfumo, `${p.inspiredBy.brand} ${p.inspiredBy.name}`)}</p>`
-      : '<p class="card-inspo is-original"><span>Designer original</span></p>';
+    const price = p.sizes.length > 1 ? `From ${money(minPrice(p))}` : money(minPrice(p));
     return `
-      <article class="card${available ? "" : " is-soldout"}" data-id="${esc(p.id)}">
-        <div class="card-media" style="--tint:${esc(p.color || "#8a7f70")}">
-          ${mediaHTML(p)}
-          ${badge}
-        </div>
+      <a class="card${available ? "" : " is-soldout"}" href="${productHref(p)}">
+        <div class="card-media" style="--tint:${esc(p.color || "#8a7f70")}">${mediaHTML(p)}</div>
         <div class="card-body">
           <p class="card-brand">${esc(p.brand)}</p>
           <h3 class="card-name">${esc(p.name)}</h3>
-          ${p.vibe ? `<p class="card-vibe">${esc(p.vibe)}</p>` : ""}
-          <p class="card-notes">${(p.notes || []).map(esc).join(" · ")}</p>
-          ${inspo}
-          ${p.parfumo ? extLink(p.parfumo, "Reviews on Parfumo", "card-link") : ""}
-          <div class="size-picker" role="radiogroup" aria-label="Size">${sizes}</div>
-          <div class="card-foot">
-            <span class="price" data-price>${money(sizeOf(p, current).price)}</span>
-            <button type="button" class="btn btn-dark btn-sm" data-add${available ? "" : " disabled"}>${available ? "Add to bag" : "Sold out"}</button>
-          </div>
+          <p class="card-price">${available ? price : "Sold out"}</p>
         </div>
-      </article>`;
+      </a>`;
   }
 
   function renderGrid() {
@@ -232,22 +211,95 @@
       .join("");
   }
 
-  grid.addEventListener("click", (e) => {
-    const card = e.target.closest(".card");
-    if (!card) return;
-    const p = productById.get(card.dataset.id);
+  // ---------- Product page ----------
+  const homeView = $("#home-view");
+  const productView = $("#product-view");
+  let homeScroll = 0;
 
+  function productPageHTML(p) {
+    const available = isAvailable(p);
+    const current = chosenSize.get(p.id) || p.sizes[0].label;
+    const sizes = p.sizes
+      .map(
+        (s) =>
+          `<button type="button" class="size-opt" role="radio" aria-checked="${s.label === current}" data-size="${esc(s.label)}"${available ? "" : " disabled"}>${esc(s.label)}<span>${money(s.price)}</span></button>`
+      )
+      .join("");
+    const inspo = p.inspiredBy
+      ? `<div><dt>Inspired by</dt><dd>${extLink(p.inspiredBy.parfumo, `${p.inspiredBy.brand} ${p.inspiredBy.name}`)}
+           <small>A dupe made by ${esc(p.brand)} to smell similar. Not the original.</small></dd></div>`
+      : "<div><dt>Type</dt><dd>Designer original</dd></div>";
+    return `
+      <div class="container product">
+        <a class="back-link" href="#shop">&larr; All scents</a>
+        <div class="product-layout">
+          <div class="product-media" style="--tint:${esc(p.color || "#8a7f70")}">${mediaHTML(p)}</div>
+          <div class="product-info" data-id="${esc(p.id)}">
+            <p class="card-brand">${esc(p.brand)}${p.badge && available ? ` · ${esc(p.badge)}` : ""}</p>
+            <h1 tabindex="-1">${esc(p.name)}</h1>
+            ${p.vibe ? `<p class="product-vibe">${esc(p.vibe)}.</p>` : ""}
+            <p class="product-price" data-price>${money(sizeOf(p, current).price)}</p>
+            <p class="picker-label" id="size-label">Size</p>
+            <div class="size-picker" role="radiogroup" aria-labelledby="size-label">${sizes}</div>
+            <button type="button" class="btn btn-dark btn-block" data-add${available ? "" : " disabled"}>${available ? "Add to bag" : "Sold out"}</button>
+            <p class="fine">No payment now. Pay in person when you collect.</p>
+            <dl class="facts">
+              <div><dt>Scent family</dt><dd>${esc(p.family || "")}</dd></div>
+              <div><dt>Main notes</dt><dd>${(p.notes || []).map(esc).join(", ")}</dd></div>
+              ${inspo}
+              ${p.parfumo ? `<div><dt>Reviews</dt><dd>${extLink(p.parfumo, "Read reviews on Parfumo")}</dd></div>` : ""}
+            </dl>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function showProduct(id) {
+    const p = productById.get(id);
+    if (!homeView.hidden) homeScroll = window.scrollY;
+    homeView.hidden = true;
+    productView.hidden = false;
+    productView.innerHTML = p
+      ? productPageHTML(p)
+      : `<div class="container product"><a class="back-link" href="#shop">&larr; All scents</a>
+           <h1 tabindex="-1">Scent not found</h1><p class="product-vibe">It may have sold out or been removed.</p></div>`;
+    document.title = p ? `${p.brand} ${p.name} | ${CONFIG.shopName}` : `Not found | ${CONFIG.shopName}`;
+    window.scrollTo({ top: 0, behavior: "instant" });
+    productView.querySelector("h1").focus({ preventScroll: true });
+  }
+
+  function showHome() {
+    const fromProduct = homeView.hidden;
+    productView.hidden = true;
+    productView.innerHTML = "";
+    homeView.hidden = false;
+    document.title = `${CONFIG.shopName} | ${CONFIG.heroTitle || "Fragrance"}`;
+    if (!fromProduct) return;
+    const target = location.hash.length > 1 && document.getElementById(location.hash.slice(1));
+    if (target) target.scrollIntoView({ behavior: "instant" });
+    else window.scrollTo({ top: homeScroll, behavior: "instant" });
+  }
+
+  function route() {
+    const match = location.hash.match(/^#scent\/(.+)$/);
+    if (match) showProduct(decodeURIComponent(match[1]));
+    else showHome();
+  }
+
+  window.addEventListener("hashchange", route);
+
+  productView.addEventListener("click", (e) => {
+    const info = e.target.closest(".product-info");
+    if (!info) return;
+    const p = productById.get(info.dataset.id);
     const sizeBtn = e.target.closest("[data-size]");
     if (sizeBtn) {
       chosenSize.set(p.id, sizeBtn.dataset.size);
-      card.querySelectorAll("[data-size]").forEach((b) => b.setAttribute("aria-checked", String(b === sizeBtn)));
-      card.querySelector("[data-price]").textContent = money(sizeOf(p, sizeBtn.dataset.size).price);
+      info.querySelectorAll("[data-size]").forEach((b) => b.setAttribute("aria-checked", String(b === sizeBtn)));
+      info.querySelector("[data-price]").textContent = money(sizeOf(p, sizeBtn.dataset.size).price);
       return;
     }
-
-    if (e.target.closest("[data-add]")) {
-      addToCart(p.id, chosenSize.get(p.id) || p.sizes[0].label);
-    }
+    if (e.target.closest("[data-add]")) addToCart(p.id, chosenSize.get(p.id) || p.sizes[0].label);
   });
 
   $("#family-filters").addEventListener("click", (e) => {
@@ -307,7 +359,7 @@
       ? lines.map(lineHTML).join("")
       : `<li class="bag-empty">
            <p>Your bag is empty.</p>
-           <button type="button" class="btn btn-outline" data-close-bag>Browse the range</button>
+           <a class="btn btn-outline" href="#shop" data-close-bag>Shop the range</a>
          </li>`;
     $("#bag-subtotal").textContent = money(cartTotal());
     $("#bag-foot").hidden = lines.length === 0;
@@ -321,7 +373,7 @@
 
   $("#bag-lines").addEventListener("click", (e) => {
     if (e.target.closest("[data-close-bag]")) {
-      closeBag();
+      closeBag(false);
       return;
     }
     const li = e.target.closest(".bag-line");
@@ -574,4 +626,5 @@
   renderFilters();
   renderGrid();
   renderBag();
+  route();
 })();

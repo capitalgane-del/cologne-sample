@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-//  PRICES — change a tier here and every scent in that tier updates.
+//  PRICES: change a tier here and every scent in that tier updates.
 // ─────────────────────────────────────────────────────────────
 const PRICE_TIERS = {
   budget: [
@@ -21,7 +21,7 @@ const PRICE_TIERS = {
 };
 
 // ─────────────────────────────────────────────────────────────
-//  YOUR RANGE — add, remove or edit products here.
+//  YOUR RANGE: add, remove or edit products here.
 //
 //  id          unique, lowercase, no spaces
 //  brand       shown above the name

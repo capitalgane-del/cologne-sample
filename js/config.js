@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────
-//  SHOP SETTINGS — edit these to make the site yours.
+//  SHOP SETTINGS: edit these to make the site yours.
 // ─────────────────────────────────────────────────────────────
 window.SHOP_CONFIG = {
   shopName: "Scent Society",
