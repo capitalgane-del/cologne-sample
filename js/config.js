@@ -20,8 +20,6 @@ window.SHOP_CONFIG = {
   // Shown under the "Place order" button and in the payment section of checkout.
   pickupNote: "No payment now. You pay cash or bank transfer when you collect at school.",
 
-  // Ask for the customer's year group / homeroom so you can find them at school.
-  askForYearGroup: true,
 
   // Label for the optional contact field at checkout.
   contactLabel: "Phone or Instagram",

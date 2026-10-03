@@ -7,7 +7,6 @@
       currencySymbol: "$",
       web3formsAccessKey: "",
       pickupNote: "",
-      askForYearGroup: true,
       contactLabel: "Phone or Instagram",
       maxQtyPerLine: 5,
     },
@@ -500,7 +499,8 @@
       "Order number": `#${id}`,
       "Customer name": details.name,
     };
-    if (CONFIG.askForYearGroup) email["Year / homeroom"] = details.year;
+    email["Email"] = details.email;
+    email.email = details.email; // lets you hit Reply in the order email
     email[CONFIG.contactLabel] = details.contact || "Not given";
     email["Items"] = items;
     email["Item count"] = String(cartCount());
@@ -559,7 +559,7 @@
 
     const details = {
       name: String(data.get("name") || "").trim(),
-      year: String(data.get("year") || "").trim(),
+      email: String(data.get("email") || "").trim(),
       contact: String(data.get("contact") || "").trim(),
       notes: String(data.get("notes") || "").trim(),
     };
@@ -614,9 +614,6 @@
       if (value) $(sel).textContent = value;
     });
     document.title = `${CONFIG.shopName} | ${CONFIG.heroTitle || "Fragrance"}`;
-    if (!CONFIG.askForYearGroup) {
-      $("#year-field").remove();
-    }
     $("#footer-year").textContent = new Date().getFullYear();
     $("#demo-banner").hidden = !DEMO_MODE;
   }

@@ -1303,6 +1303,13 @@ legend {
   }
 }
 
+.pickup-contact {
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+  font-size: 14px;
+}
+
 .form-error {
   margin-top: -10px;
   color: var(--danger);

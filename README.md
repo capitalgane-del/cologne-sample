@@ -1,6 +1,6 @@
 # Scent Society: school cologne shop
 
-A shop website for selling fragrances at school. Customers browse the range, add scents to a bag and check out with a **Place order** button, like a normal online store. No payment happens on the site. When they place an order, **you get an email** with their name, year/homeroom, contact details, items and total. They pay you in person when they collect.
+A shop website for selling fragrances at school. Customers browse the range, add scents to a bag and check out with a **Place order** button, like a normal online store. No payment happens on the site. When they place an order, **you get an email** with their name, email, phone or Instagram, items and total. They pay you in person when they collect.
 
 It's plain HTML/CSS/JS: no build step, no server, and free to host.
 
@@ -30,7 +30,7 @@ Subject: New order #Q5WXP6 from Sam Taylor ($34.00)
 
 Order number:        #Q5WXP6
 Customer name:       Sam Taylor
-Year / homeroom:     Year 11
+Email:               sam.t@school.edu.au
 Phone or Instagram:  @samt
 Items:               2 x Lattafa Khamrah (10ml) = $26.00
                      1 x Armaf Club de Nuit Intense Man (5ml) = $8.00
@@ -79,7 +79,7 @@ The current prices are starting estimates based on what a bottle costs per ml. C
 
 ## 3. Change the text
 
-`js/config.js` controls the shop name, hero text, pickup/payment note, whether to ask for year group, and the max quantity per scent. Check the FAQ answers in `index.html` too, and only keep the "authentic" answer if it's true. Never call a dupe by the original's name: "inspired by Aventus" is fine, "Aventus" is not.
+`js/config.js` controls the shop name, hero text, pickup/payment note and the max quantity per scent. Check the FAQ answers in `index.html` too, and only keep the "authentic" answer if it's true. Never call a dupe by the original's name: "inspired by Aventus" is fine, "Aventus" is not.
 
 ## 4. Put it online (free)
 

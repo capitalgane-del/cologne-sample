@@ -84,7 +84,7 @@
           <li>
             <span class="step-num">2</span>
             <h3>Place your order</h3>
-            <p>Check out with your name. You'll get an order number straight away.</p>
+            <p>Check out with your name and email. You get an order number straight away.</p>
           </li>
           <li>
             <span class="step-num">3</span>
@@ -169,9 +169,9 @@
               <span>Full name</span>
               <input name="name" autocomplete="name" required maxlength="80" pattern=".*\S.*" title="Please enter your name">
             </label>
-            <label class="field" id="year-field">
-              <span>Year / homeroom</span>
-              <input name="year" required maxlength="40" placeholder="e.g. Year 11, 11B" pattern=".*\S.*" title="Please enter your year or homeroom">
+            <label class="field">
+              <span>Email</span>
+              <input type="email" name="email" autocomplete="email" required maxlength="120" placeholder="School or personal email">
             </label>
             <label class="field">
               <span><span id="contact-label">Phone or Instagram</span> <em>(optional)</em></span>
@@ -194,6 +194,8 @@
               </span>
             </div>
           </fieldset>
+
+          <p class="pickup-contact">We will contact you by email or phone to arrange your pickup at school.</p>
 
           <button type="submit" class="btn btn-dark btn-block btn-pay" id="place-order">
             <span class="btn-label">Place order</span>
@@ -230,7 +232,7 @@
         </div>
         <ol class="next-steps">
           <li>We've received your order.</li>
-          <li>We'll get in touch to arrange pickup at school.</li>
+          <li>We will contact you to arrange your pickup at school.</li>
           <li>Pay when you collect. Screenshot this page to keep your order number.</li>
         </ol>
         <button type="button" class="btn btn-dark btn-block" id="success-done">Continue shopping</button>
