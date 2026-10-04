@@ -490,7 +490,7 @@
     const total = cartTotal();
     const id = makeOrderId();
     const items = lines
-      .map((l) => `${l.qty} x ${l.product.brand} ${l.product.name} (${l.size}) = ${money(l.total)}`)
+      .map((l) => `${l.qty} x ${l.product.brand} ${l.product.name} (${l.size}) = ${money(l.total)}${l.product.owner ? ` [${l.product.owner}'s stock]` : ""}`)
       .join("\n");
 
     const email = {
