@@ -15,6 +15,8 @@
   --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --header-h: 64px;
+  --studio-wall: #e4e2de;
+  --studio-shelf: #1f1f20;
 }
 
 *,
@@ -389,6 +391,36 @@ a {
   .hero-bottle .bottle ellipse {
     display: none;
   }
+
+  .hero-visual:has(.hero-photo) {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hero-photo {
+    position: relative;
+    flex: none;
+    background: var(--studio-wall);
+    width: 34%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: var(--radius);
+    filter: none;
+    box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+  }
+
+  .hero-photo:nth-child(2) {
+    width: 42%;
+    height: auto;
+    margin: 0 -5%;
+  }
+
+  .hero-photo img {
+    position: absolute;
+    inset: 0;
+    object-fit: cover;
+  }
 }
 
 .hero-sub {
@@ -559,29 +591,43 @@ a {
   border-color: var(--ink);
 }
 
+/* Every product image sits in the same square frame. Photos fill it; drawn
+   bottles get a matching wall-and-shelf backdrop and the same framing as the
+   photos (base at 95%, top at about 13%), so the grid reads as one set. */
 .card-media,
+.product-media,
 .line-media,
 .sum-media {
   position: relative;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(160deg, #fbf9f5, color-mix(in srgb, var(--tint) 14%, #f3efe7));
-}
-
-.card-media {
+  overflow: hidden;
   aspect-ratio: 1 / 1;
-  padding: 14% 0 8%;
+  background: var(--studio-wall);
 }
 
-.card-media .bottle,
-.card-media img {
+.is-photo img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
   height: 100%;
-  width: auto;
-  max-width: 100%;
+  object-fit: cover;
 }
 
-.card-media img {
-  object-fit: contain;
+.is-drawn {
+  background: linear-gradient(to bottom, var(--studio-wall) 0 88%, var(--studio-shelf) 88% 100%);
+}
+
+.is-drawn .bottle {
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  height: 96%;
+  width: auto;
+  transform: translateX(-50%);
+}
+
+.is-drawn .bottle ellipse {
+  display: none;
 }
 
 
@@ -752,21 +798,8 @@ a {
 }
 
 .product-media {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1 / 1;
-  padding: 12% 0 6%;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: linear-gradient(160deg, #fbf9f5, color-mix(in srgb, var(--tint) 14%, #f3efe7));
-}
-
-.product-media .bottle,
-.product-media img {
-  height: 100%;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
 }
 
 .product-info {
@@ -1039,19 +1072,7 @@ a {
 
 .line-media {
   width: 72px;
-  height: 88px;
   border-radius: var(--radius-sm);
-  padding: 8px 0;
-}
-
-.line-media .bottle,
-.line-media img,
-.sum-media .bottle,
-.sum-media img {
-  height: 100%;
-  width: auto;
-  max-width: 100%;
-  object-fit: contain;
 }
 
 .line-brand {
@@ -1402,17 +1423,16 @@ legend {
 }
 
 .sum-media {
-  width: 54px;
-  height: 60px;
-  padding: 6px 0;
+  width: 56px;
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
 }
 
 .sum-qty {
   position: absolute;
-  top: -8px;
-  right: -8px;
+  top: 3px;
+  right: 3px;
+  z-index: 1;
   min-width: 20px;
   height: 20px;
   padding: 0 5px;
@@ -1528,6 +1548,7 @@ legend {
   display: flex;
   align-items: center;
   gap: 16px;
+  width: max-content;
   max-width: calc(100% - 32px);
   padding: 12px 14px 12px 18px;
   border-radius: 999px;

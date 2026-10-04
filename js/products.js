@@ -45,7 +45,8 @@ const PRICE_TIERS = {
 //  shape       classic | tall | round | square
 //  mono        short text on the label (defaults to the brand, or its initials)
 //
-//  image       optional path to a real photo, e.g. "images/khamrah.jpg"
+//  image       path to the product photo, e.g. "images/lattafa-khamrah.jpg".
+//              Photos are square, 1000x1000, made with tools/process_photos.py so they all match.
 // ─────────────────────────────────────────────────────────────
 window.PRODUCTS = [
   {
@@ -66,6 +67,7 @@ window.PRODUCTS = [
     color: "#8a3b1e",
     capColor: "#c9a54e",
     shape: "round",
+    image: "images/lattafa-khamrah.jpg",
     inStock: true,
   },
   {
@@ -103,6 +105,7 @@ window.PRODUCTS = [
     color: "#8cbcd0",
     capColor: "#1b1b1d",
     shape: "tall",
+    image: "images/mm-sailing-day.jpg",
     inStock: true,
   },
   {
@@ -122,6 +125,7 @@ window.PRODUCTS = [
     color: "#6b3a1f",
     capColor: "#c9a54e",
     shape: "classic",
+    image: "images/fa-liquid-brun.jpg",
     inStock: true,
   },
   {
@@ -141,26 +145,27 @@ window.PRODUCTS = [
     color: "#3a2a24",
     capColor: "#c9a54e",
     shape: "square",
+    image: "images/lattafa-oud-for-glory.jpg",
     inStock: true,
   },
   {
-    id: "al-haramain-amber-oud-gold",
+    id: "al-haramain-amber-oud-ruby",
     brand: "Al Haramain",
-    name: "Amber Oud Gold Edition",
+    name: "Amber Oud Ruby Edition",
     family: "Sweet",
-    warmWeather: true,
-    vibe: "Fruity, sweet and loud",
-    notes: ["Bergamot", "Melon", "Vanilla"],
+    vibe: "Saffron and amber, the famous Baccarat Rouge dupe",
+    notes: ["Saffron", "Bitter almond", "Ambergris"],
     sizes: PRICE_TIERS.mid,
-    parfumo: "https://www.parfumo.com/Perfumes/Al_Haramain/haramain-amber-oud-gold-edition",
+    parfumo: "https://www.parfumo.com/Perfumes/Al_Haramain/haramain-amber-oud-ruby-edition",
     inspiredBy: {
-      brand: "Xerjoff",
-      name: "Erba Pura",
-      parfumo: "https://www.parfumo.com/Perfumes/Xerjoff/Erba_Pura",
+      brand: "Maison Francis Kurkdjian",
+      name: "Baccarat Rouge 540 Extrait",
+      parfumo: "https://www.parfumo.com/Perfumes/Maison_Francis_Kurkdjian/Baccarat_Rouge_540_Extrait_de_Parfum",
     },
-    color: "#c99a2e",
-    capColor: "#8c6d1f",
+    color: "#a8562f",
+    capColor: "#b08a6e",
     shape: "classic",
+    image: "images/al-haramain-amber-oud-ruby.jpg",
     inStock: true,
   },
   {
@@ -181,6 +186,7 @@ window.PRODUCTS = [
     color: "#5b8a5a",
     capColor: "#e3dccd",
     shape: "tall",
+    image: "images/fa-aether-extrait.jpg",
     inStock: true,
   },
   {
@@ -201,6 +207,7 @@ window.PRODUCTS = [
     color: "#7fc3d9",
     capColor: "#b9c4c9",
     shape: "tall",
+    image: "images/rasasi-hawas-ice.jpg",
     inStock: true,
   },
   {
@@ -221,6 +228,7 @@ window.PRODUCTS = [
     color: "#d8a33a",
     capColor: "#2a2a2a",
     shape: "square",
+    image: "images/fa-ravine-ginger.jpg",
     inStock: true,
   },
   {
@@ -241,6 +249,7 @@ window.PRODUCTS = [
     color: "#5f8f8a",
     capColor: "#2a2a2a",
     shape: "square",
+    image: "images/fa-ravine-ice.jpg",
     inStock: true,
   },
   {
@@ -255,6 +264,7 @@ window.PRODUCTS = [
     color: "#2a8a86",
     capColor: "#c9a54e",
     shape: "tall",
+    image: "images/versace-eros-edt.jpg",
     inStock: true,
   },
   {
@@ -269,6 +279,7 @@ window.PRODUCTS = [
     color: "#2d2645",
     capColor: "#8c7a52",
     shape: "classic",
+    image: "images/valentino-bir-intense.jpg",
     inStock: true,
   },
   {
@@ -283,6 +294,7 @@ window.PRODUCTS = [
     color: "#6fa3c7",
     capColor: "#b9b9bd",
     shape: "round",
+    image: "images/jpg-le-male-edt.jpg",
     inStock: true,
   },
   {
@@ -298,6 +310,7 @@ window.PRODUCTS = [
     color: "#6e747b",
     capColor: "#1b1b1d",
     shape: "round",
+    image: "images/azzaro-wanted-edt.jpg",
     inStock: true,
   },
   {
@@ -313,6 +326,7 @@ window.PRODUCTS = [
     color: "#2f5f8a",
     capColor: "#c7c7ca",
     shape: "round",
+    image: "images/nautica-voyage.jpg",
     inStock: true,
   },
   {
@@ -328,6 +342,7 @@ window.PRODUCTS = [
     color: "#2f7fb5",
     capColor: "#1e5a85",
     shape: "tall",
+    image: "images/davidoff-cool-water.jpg",
     inStock: true,
   },
   {
@@ -343,6 +358,23 @@ window.PRODUCTS = [
     color: "#b9782d",
     capColor: "#3a3a3a",
     shape: "classic",
+    image: "images/beckham-instinct.jpg",
+    inStock: true,
+  },
+  {
+    id: "beckham-intimately",
+    brand: "David Beckham",
+    name: "Intimately",
+    family: "Sweet",
+    vibe: "Warm spice and amber, a budget date-night pick",
+    notes: ["Cardamom", "Star anise", "Amber"],
+    sizes: PRICE_TIERS.budget,
+    parfumo: "https://www.parfumo.com/Perfumes/David_Beckham/Intimately_Men_Eau_de_Toilette",
+    color: "#c0703a",
+    capColor: "#d9d2c4",
+    shape: "square",
+    mono: "DB",
+    image: "images/beckham-intimately.jpg",
     inStock: true,
   },
   {

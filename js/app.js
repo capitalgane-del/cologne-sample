@@ -83,10 +83,14 @@
       </svg>`;
   }
 
-  function mediaHTML(p) {
-    if (p.image) return `<img src="${esc(p.image)}" alt="${esc(p.brand + " " + p.name)}" loading="lazy">`;
+  // Photo if the product has one, otherwise the drawn bottle. Both sit in the
+  // same square frame; mediaClass tells the frame which it is holding.
+  function mediaHTML(p, eager = false) {
+    if (p.image)
+      return `<img src="${esc(p.image)}" alt="${esc(p.brand + " " + p.name)}" width="1000" height="1000" decoding="async"${eager ? "" : ' loading="lazy"'}>`;
     return bottleSVG(p);
   }
+  const mediaClass = (p) => (p.image ? "is-photo" : "is-drawn");
 
   // ---------- Cart state ----------
   let cart = loadCart();
@@ -190,7 +194,7 @@
     // The name link stretches over the whole card; the inspired-by link sits above it.
     return `
       <article class="card${available ? "" : " is-soldout"}">
-        <div class="card-media" style="--tint:${esc(p.color || "#8a7f70")}">${mediaHTML(p)}</div>
+        <div class="card-media ${mediaClass(p)}">${mediaHTML(p)}</div>
         <div class="card-body">
           <p class="card-brand">${esc(p.brand)}</p>
           <h3 class="card-name"><a class="card-main-link" href="${productHref(p)}">${esc(p.name)}</a></h3>
@@ -240,7 +244,7 @@
       <div class="container product">
         <a class="back-link" href="#shop">&larr; All scents</a>
         <div class="product-layout">
-          <div class="product-media" style="--tint:${esc(p.color || "#8a7f70")}">${mediaHTML(p)}</div>
+          <div class="product-media ${mediaClass(p)}">${mediaHTML(p, true)}</div>
           <div class="product-info" data-id="${esc(p.id)}">
             <p class="card-brand">${esc(p.brand)}${p.badge && available ? ` · ${esc(p.badge)}` : ""}</p>
             <h1 tabindex="-1">${esc(p.name)}</h1>
@@ -338,7 +342,7 @@
     const p = l.product;
     return `
       <li class="bag-line" data-id="${esc(l.id)}" data-size="${esc(l.size)}">
-        <div class="line-media" style="--tint:${esc(p.color || "#8a7f70")}">${mediaHTML(p)}</div>
+        <div class="line-media ${mediaClass(p)}">${mediaHTML(p)}</div>
         <div class="line-info">
           <p class="line-brand">${esc(p.brand)}</p>
           <p class="line-name">${esc(p.name)}</p>
@@ -434,7 +438,7 @@
       .map(
         (l) => `
         <li>
-          <div class="sum-media" style="--tint:${esc(l.product.color || "#8a7f70")}">
+          <div class="sum-media ${mediaClass(l.product)}">
             ${mediaHTML(l.product)}<span class="sum-qty">${l.qty}</span>
           </div>
           <div class="sum-info">
@@ -606,12 +610,15 @@
   }
 
   // ---------- Hero ----------
-  // Shows up to three in-stock products, badged ones first.
+  // Shows up to three in-stock products: photographed ones first, then badged.
   function renderHero() {
+    const score = (p) => (p.image ? 2 : 0) + (p.badge ? 1 : 0);
     const picks = PRODUCTS.filter(isAvailable)
-      .sort((a, b) => Boolean(b.badge) - Boolean(a.badge))
+      .sort((a, b) => score(b) - score(a))
       .slice(0, 3);
-    $("#hero-visual").innerHTML = picks.map((p) => `<div class="hero-bottle">${mediaHTML(p)}</div>`).join("");
+    $("#hero-visual").innerHTML = picks
+      .map((p) => `<div class="hero-bottle${p.image ? " hero-photo" : ""}">${mediaHTML(p, true)}</div>`)
+      .join("");
   }
 
   // ---------- Init ----------

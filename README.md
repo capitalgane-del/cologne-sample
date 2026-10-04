@@ -72,7 +72,7 @@ Edit `js/products.js`. Each product looks like this:
 - **Prices** are set by tier at the top of the file (`budget`, `standard`, `mid`, `premium`). Change a tier once and every scent in it updates. A product can also have its own list: `sizes: [{ label: "5ml", price: 9 }, { label: "10ml", price: 15 }]`.
 - **Parfumo links:** search the scent on parfumo.com and copy the page address. Each card shows "Reviews on Parfumo", and dupes also show "Inspired by …" linking to the original. Both open in a new tab, so shoppers don't lose their bag.
 - **Search** also matches the original's name, so typing "Aventus" finds Club de Nuit.
-- **Real photos:** put images in an `images/` folder and add `image: "images/khamrah.jpg"` to a product. It replaces the drawn bottle.
+- **Photos:** each product photo lives in `images/<product id>.jpg` and is set with `image: "images/<product id>.jpg"`. All photos are square (1000x1000) with the bottle the same size and position, made by `tools/process_photos.py`. To add one: take it against the same wall and shelf, add a line for it in that script (see the instructions at the top), and run it. Products without a photo show a drawn bottle on a matching background.
 - **Sold out:** set `inStock: false`. The item stays visible but can't be ordered.
 
 The current prices are starting estimates based on what a bottle costs per ml. Check them against what you actually paid.
