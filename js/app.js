@@ -165,6 +165,7 @@
   const filters = { family: "All", query: "", sort: "featured" };
   const chosenSize = new Map();
   const WARM = "Warmer weather";
+  const SUN = '<svg class="chip-icon" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><circle cx="12" cy="12" r="4.2" fill="currentColor"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
 
   function visibleProducts() {
     const q = filters.query.trim().toLowerCase();
@@ -214,10 +215,12 @@
 
   function renderFilters() {
     const families = ["All", ...(PRODUCTS.some((p) => p.warmWeather) ? [WARM] : []), ...new Set(PRODUCTS.map((p) => p.family).filter(Boolean))];
+    const warmCount = PRODUCTS.filter((p) => p.warmWeather).length;
     $("#family-filters").innerHTML = families
-      .map(
-        (f) =>
-          `<button type="button" class="chip" data-family="${esc(f)}" aria-pressed="${f === filters.family}">${esc(f)}</button>`
+      .map((f) =>
+        f === WARM
+          ? `<button type="button" class="chip chip-warm" data-family="${esc(f)}" aria-pressed="${f === filters.family}">${SUN}${esc(f)}<span class="chip-count">${warmCount}</span></button>`
+          : `<button type="button" class="chip" data-family="${esc(f)}" aria-pressed="${f === filters.family}">${esc(f)}</button>`
       )
       .join("");
   }

@@ -1,9 +1,11 @@
 :root {
-  --bg: #f7f4ee;
-  --surface: #ffffff;
-  --ink: #16140f;
-  --muted: #6d675d;
-  --line: #e3ddd2;
+  /* Neutral greys measured from the product photos' wall, so the photos
+     blend into the page. */
+  --bg: #e5e5e3;
+  --surface: #f6f6f4;
+  --ink: #171716;
+  --muted: #5c5c58;
+  --line: #d2d2ce;
   --accent: #a8834a;
   --dark: #121110;
   --dark-ink: #f4efe6;
@@ -15,8 +17,8 @@
   --serif: "Cormorant Garamond", Georgia, "Times New Roman", serif;
   --sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --header-h: 64px;
-  --studio-wall: #e4e2de;
-  --studio-shelf: #1f1f20;
+  --studio-wall: #e5e5e3;
+  --studio-shelf: #38363b;
 }
 
 *,
@@ -225,7 +227,7 @@ a {
   position: sticky;
   top: 0;
   z-index: 20;
-  background: rgba(247, 244, 238, 0.88);
+  background: rgba(229, 229, 227, 0.9);
   backdrop-filter: saturate(1.4) blur(10px);
   -webkit-backdrop-filter: saturate(1.4) blur(10px);
   border-bottom: 1px solid var(--line);
@@ -513,15 +515,22 @@ a {
   display: none;
 }
 
+/* Desktop: search and sort on one line, every filter chip visible on the
+   line below (no hidden horizontal scroll). */
 @media (min-width: 900px) {
   .toolbar {
-    grid-template-columns: minmax(240px, 320px) 1fr auto;
+    grid-template-columns: minmax(240px, 360px) auto;
+    justify-content: space-between;
     align-items: center;
   }
 
+  .sort {
+    justify-self: end;
+  }
+
   .chips {
-    grid-column: auto;
-    grid-row: auto;
+    flex-wrap: wrap;
+    overflow: visible;
     margin: 0;
     padding: 0;
   }
@@ -542,7 +551,63 @@ a {
   border-color: var(--ink);
 }
 
-.chip[aria-pressed="true"] {
+/* Seasonal filter: warm amber so it stands out from the scent families,
+   with a divider after it. */
+.chip-warm {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 13px;
+  padding: 0 8px 0 12px;
+  border-color: #dfa43e;
+  background: #fde9bf;
+  color: #5a3900;
+  font-weight: 600;
+}
+
+.chip-warm::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: -11px;
+  bottom: 6px;
+  width: 1px;
+  background: var(--line);
+}
+
+.chip-warm:hover {
+  border-color: #c98a1f;
+  background: #fcdc98;
+}
+
+.chip-icon {
+  flex: none;
+  color: #a85a00;
+}
+
+.chip-count {
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  line-height: 22px;
+  text-align: center;
+}
+
+.chip-warm[aria-pressed="true"] {
+  border-color: #c98a1f;
+  background: #e9a23b;
+  color: #2b1a00;
+}
+
+.chip-warm[aria-pressed="true"] .chip-icon {
+  color: #2b1a00;
+}
+
+.chip[aria-pressed="true"]:not(.chip-warm) {
   border-color: var(--dark);
   background: var(--dark);
   color: var(--dark-ink);
@@ -1313,7 +1378,7 @@ legend {
   padding: 14px 16px;
   border: 1.5px solid var(--ink);
   border-radius: var(--radius-sm);
-  background: #fbfaf7;
+  background: var(--bg);
 }
 
 .pay-option strong {
@@ -1437,7 +1502,7 @@ legend {
   height: 20px;
   padding: 0 5px;
   border-radius: 999px;
-  background: #6d675d;
+  background: var(--muted);
   color: #fff;
   font-size: 11px;
   font-weight: 600;
