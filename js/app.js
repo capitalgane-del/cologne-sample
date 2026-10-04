@@ -160,11 +160,14 @@
   const grid = $("#product-grid");
   const filters = { family: "All", query: "", sort: "featured" };
   const chosenSize = new Map();
+  const WARM = "Warmer weather";
 
   function visibleProducts() {
     const q = filters.query.trim().toLowerCase();
     let list = PRODUCTS.filter((p) => {
-      if (filters.family !== "All" && p.family !== filters.family) return false;
+      if (filters.family === WARM) {
+        if (!p.warmWeather) return false;
+      } else if (filters.family !== "All" && p.family !== filters.family) return false;
       if (!q) return true;
       const inspo = p.inspiredBy ? [p.inspiredBy.brand, p.inspiredBy.name] : [];
       return [p.brand, p.name, p.family, ...(p.notes || []), ...inspo].join(" ").toLowerCase().includes(q);
@@ -181,15 +184,20 @@
   function cardHTML(p) {
     const available = isAvailable(p);
     const price = p.sizes.length > 1 ? `From ${money(minPrice(p))}` : money(minPrice(p));
+    const inspo = p.inspiredBy
+      ? `<p class="card-inspo">Inspired by ${extLink(p.inspiredBy.parfumo, `${p.inspiredBy.brand} ${p.inspiredBy.name}`)}</p>`
+      : "";
+    // The name link stretches over the whole card; the inspired-by link sits above it.
     return `
-      <a class="card${available ? "" : " is-soldout"}" href="${productHref(p)}">
+      <article class="card${available ? "" : " is-soldout"}">
         <div class="card-media" style="--tint:${esc(p.color || "#8a7f70")}">${mediaHTML(p)}</div>
         <div class="card-body">
           <p class="card-brand">${esc(p.brand)}</p>
-          <h3 class="card-name">${esc(p.name)}</h3>
+          <h3 class="card-name"><a class="card-main-link" href="${productHref(p)}">${esc(p.name)}</a></h3>
+          ${inspo}
           <p class="card-price">${available ? price : "Sold out"}</p>
         </div>
-      </a>`;
+      </article>`;
   }
 
   function renderGrid() {
@@ -201,7 +209,7 @@
   }
 
   function renderFilters() {
-    const families = ["All", ...new Set(PRODUCTS.map((p) => p.family).filter(Boolean))];
+    const families = ["All", ...(PRODUCTS.some((p) => p.warmWeather) ? [WARM] : []), ...new Set(PRODUCTS.map((p) => p.family).filter(Boolean))];
     $("#family-filters").innerHTML = families
       .map(
         (f) =>

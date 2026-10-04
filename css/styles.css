@@ -667,6 +667,49 @@ a {
 }
 
 /* ---------- Product card (grid) ---------- */
+.card {
+  position: relative;
+}
+
+.card-main-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.card-main-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+}
+
+.card-main-link:focus-visible {
+  outline: 0;
+}
+
+.card-main-link:focus-visible::after {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.card-inspo {
+  position: relative;
+  z-index: 1;
+  margin-top: 2px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.card-inspo a {
+  color: var(--ink);
+  text-underline-offset: 2px;
+}
+
+.card-inspo a svg {
+  margin-left: 2px;
+}
+
 .card-price {
   margin-top: 6px;
   font-size: 15px;
